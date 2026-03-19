@@ -55,6 +55,7 @@ com/jmem/embedder/Embedder.class
 com/jmem/core/knowledge/RuleBasedKnowledgeExtractor.class
 com/jmem/storage/impl/QdrantRequests$CreateCollectionRequest.class
 com/jmem/core/impl/DefaultMemoryService$2.class
+com/jmem/core/knowledge/PromptTemplate.class
 com/jmem/config/JmemProperties$EmbedderConfig.class
 com/jmem/core/knowledge/KnowledgeExtractor.class
 com/jmem/core/knowledge/LLMKnowledgeExtractor.class

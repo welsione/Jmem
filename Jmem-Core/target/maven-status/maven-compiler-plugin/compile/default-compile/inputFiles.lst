@@ -8,6 +8,7 @@
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/Payload.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/SearchFilter.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/model/VectorSearchResult.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/knowledge/PromptTemplate.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/config/JmemProperties.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/JmemAutoConfiguration.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/fusion/ReciprocalRankFusionStrategy.java

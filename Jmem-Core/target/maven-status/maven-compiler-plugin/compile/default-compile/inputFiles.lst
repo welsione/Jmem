@@ -25,6 +25,7 @@
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/impl/InMemoryVectorStore.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/MemoryService.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/embedder/impl/SimpleEmbedder.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/util/PromptUtils.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/config/ProviderConfig.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/knowledge/RuleBasedKnowledgeExtractor.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/impl/QdrantRequests.java

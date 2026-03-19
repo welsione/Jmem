@@ -2,8 +2,10 @@ package com.jmem.core.knowledge;
 
 import com.jmem.llm.LLM;
 import com.jmem.model.Memory;
+import com.jmem.util.PromptUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 基于 LLM 的知识提取器实现。
@@ -22,11 +24,8 @@ public class LLMKnowledgeExtractor implements KnowledgeExtractor {
             return "";
         }
 
-        String prompt = PromptTemplate.EXTRACT_TEMPLATE
-                .replace("{content}", memory.getData().toString())
-                .replace("{scope}", memory.getScope() != null ? memory.getScope().name() : "未指定")
-                .replace("{userId}", memory.getUserId() != null ? memory.getUserId() : "未指定")
-                .replace("{sessionId}", memory.getSessionId() != null ? memory.getSessionId() : "未指定");
+        Map<String, String> params = PromptUtils.buildExtractParams(memory);
+        String prompt = PromptUtils.fillTemplate(PromptTemplate.EXTRACT_TEMPLATE, params);
 
         return llm.extractKnowledge(prompt);
     }
@@ -37,15 +36,8 @@ public class LLMKnowledgeExtractor implements KnowledgeExtractor {
             return "";
         }
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < memories.size(); i++) {
-            Memory m = memories.get(i);
-            sb.append("【记忆 ").append(i + 1).append("】\n");
-            sb.append("范围：").append(m.getScope()).append("\n");
-            sb.append("内容：").append(m.getData()).append("\n\n");
-        }
-
-        String prompt = PromptTemplate.SUMMARIZE_TEMPLATE.replace("{memoryList}", sb.toString());
+        Map<String, String> params = PromptUtils.buildSummarizeParams(memories);
+        String prompt = PromptUtils.fillTemplate(PromptTemplate.SUMMARIZE_TEMPLATE, params);
 
         return llm.generate(prompt);
     }

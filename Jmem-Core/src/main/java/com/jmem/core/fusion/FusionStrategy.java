@@ -2,6 +2,7 @@ package com.jmem.core.fusion;
 
 import com.jmem.model.Memory;
 
+import com.jmem.model.MemoryScope;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface FusionStrategy {
      * @param scope       记忆范围过滤
      * @return 融合后的记忆列表
      */
-    List<Memory> fuse(List<? extends List<? extends ScoredResult>> resultLists, int topK, com.jmem.model.MemoryScope scope);
+    List<Memory> fuse(List<? extends List<? extends ScoredResult>> resultLists, int topK, MemoryScope scope);
 
     /**
      * 带分数的搜索结果接口。

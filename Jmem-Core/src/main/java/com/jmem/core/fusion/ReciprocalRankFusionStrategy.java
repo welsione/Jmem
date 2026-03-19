@@ -8,6 +8,8 @@ import java.util.*;
 /**
  * 互惠排名融合（RRF）策略实现。
  * 融合多个搜索结果列表，使用公式: score = Σ 1/(k+rank)
+ *
+ * @see <a href="doc/fusion/RRF.md">RRF 算法文档</a>
  */
 public class ReciprocalRankFusionStrategy implements FusionStrategy {
 

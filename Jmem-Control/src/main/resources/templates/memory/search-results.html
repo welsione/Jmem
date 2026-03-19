@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Results</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Search Results</h1>
+    <p>Query: <strong th:text="${query}"></strong></p>
+    <p>Results: <strong th:text="${#lists.size(memories)}"></strong></p>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/memory">Memory List</a>
+    </nav>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Scope</th>
+                <th>Data</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="m : ${memories}">
+                <td th:text="${#strings.abbreviate(m.id, 20)}">-</td>
+                <td th:text="${m.scope}">-</td>
+                <td th:text="${#strings.abbreviate(m.data, 80)}">-</td>
+                <td>
+                    <a th:href="@{/memory/{id}(id=${m.id})}">View</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(memories)}">
+                <td colspan="4">No results found.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

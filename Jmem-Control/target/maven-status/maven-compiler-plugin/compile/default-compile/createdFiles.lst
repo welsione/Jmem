@@ -1,0 +1,7 @@
+com/jmem/control/MemoryEvent$EventType.class
+com/jmem/control/MemoryEvent.class
+com/jmem/Main.class
+com/jmem/control/MemoryController.class
+com/jmem/control/MemoryRegistry$1.class
+com/jmem/control/MemoryRegistry.class
+com/jmem/control/MemoryPolicy.class

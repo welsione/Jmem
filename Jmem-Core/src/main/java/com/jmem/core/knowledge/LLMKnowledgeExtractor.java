@@ -22,13 +22,11 @@ public class LLMKnowledgeExtractor implements KnowledgeExtractor {
             return "";
         }
 
-        String prompt = PromptTemplate.replace(
-                PromptTemplate.EXTRACT_TEMPLATE,
-                memory.getData().toString(),
-                memory.getScope() != null ? memory.getScope().name() : "未指定",
-                memory.getUserId() != null ? memory.getUserId() : "未指定",
-                memory.getSessionId() != null ? memory.getSessionId() : "未指定"
-        );
+        String prompt = PromptTemplate.EXTRACT_TEMPLATE
+                .replace("{content}", memory.getData().toString())
+                .replace("{scope}", memory.getScope() != null ? memory.getScope().name() : "未指定")
+                .replace("{userId}", memory.getUserId() != null ? memory.getUserId() : "未指定")
+                .replace("{sessionId}", memory.getSessionId() != null ? memory.getSessionId() : "未指定");
 
         return llm.extractKnowledge(prompt);
     }
@@ -39,11 +37,15 @@ public class LLMKnowledgeExtractor implements KnowledgeExtractor {
             return "";
         }
 
-        String memoryList = PromptTemplate.formatMemoryList(memories);
-        String prompt = PromptTemplate.replace(
-                PromptTemplate.SUMMARIZE_TEMPLATE,
-                memoryList
-        );
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < memories.size(); i++) {
+            Memory m = memories.get(i);
+            sb.append("【记忆 ").append(i + 1).append("】\n");
+            sb.append("范围：").append(m.getScope()).append("\n");
+            sb.append("内容：").append(m.getData()).append("\n\n");
+        }
+
+        String prompt = PromptTemplate.SUMMARIZE_TEMPLATE.replace("{memoryList}", sb.toString());
 
         return llm.generate(prompt);
     }

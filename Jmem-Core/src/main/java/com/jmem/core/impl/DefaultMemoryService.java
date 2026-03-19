@@ -4,7 +4,8 @@ import com.jmem.core.MemoryService;
 import com.jmem.embedder.Embedder;
 import com.jmem.model.Memory;
 import com.jmem.model.MemoryScope;
-import com.jmem.model.SearchResult;
+import com.jmem.storage.Payload;
+import com.jmem.storage.SearchFilter;
 import com.jmem.storage.VectorStore.VectorSearchResult;
 import com.jmem.storage.DocumentStore;
 import com.jmem.storage.VectorStore;
@@ -38,8 +39,15 @@ public class DefaultMemoryService implements MemoryService {
         }
 
         float[] embedding = embedder.embed(memory.getData().toString());
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("memory", memory);
+
+        Payload payload = Payload.builder()
+                .memoryId(id)
+                .userId(memory.getUserId())
+                .sessionId(memory.getSessionId())
+                .agentId(memory.getAgentId())
+                .scope(memory.getScope() != null ? memory.getScope().name() : null)
+                .content(memory.getData() != null ? memory.getData().toString() : null)
+                .build();
 
         vectorStore.upsert(id, embedding, payload);
         documentStore.save(memory);
@@ -50,15 +58,19 @@ public class DefaultMemoryService implements MemoryService {
     @Override
     public List<Memory> search(String query, MemoryScope scope, int limit) {
         float[] queryEmbedding = embedder.embed(query);
-        Map<String, Object> filter = scope != null ? Map.of("scope", scope.name()) : null;
+
+        SearchFilter filter = null;
+        if (scope != null) {
+            filter = SearchFilter.builder().scope(scope.name()).build();
+        }
 
         List<VectorSearchResult> vectorResults = vectorStore.search(queryEmbedding, limit * 2, filter);
 
         return vectorResults.stream()
                 .map(result -> {
-                    Map<String, Object> payload = result.getPayload();
-                    if (payload != null && payload.containsKey("memory")) {
-                        return (Memory) payload.get("memory");
+                    Payload payload = result.getPayload();
+                    if (payload != null && payload.getMemoryId() != null) {
+                        return documentStore.findById(payload.getMemoryId()).orElse(null);
                     }
                     return documentStore.findById(result.getId()).orElse(null);
                 })
@@ -86,7 +98,7 @@ public class DefaultMemoryService implements MemoryService {
     public List<Memory> getAll(MemoryScope scope, String scopeId) {
         if (scope == null) {
             // Return all memories
-            List<Memory> all = new java.util.ArrayList<>();
+            List<Memory> all = new ArrayList<>();
             documentStore.findByScope(MemoryScope.USER.name(), null).forEach(all::add);
             documentStore.findByScope(MemoryScope.SESSION.name(), null).forEach(all::add);
             documentStore.findByScope(MemoryScope.AGENT.name(), null).forEach(all::add);
@@ -101,8 +113,16 @@ public class DefaultMemoryService implements MemoryService {
             documentStore.update(memory);
             // Re-embed and update vector store
             float[] embedding = embedder.embed(memory.getData().toString());
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("memory", memory);
+
+            Payload payload = Payload.builder()
+                    .memoryId(memory.getId())
+                    .userId(memory.getUserId())
+                    .sessionId(memory.getSessionId())
+                    .agentId(memory.getAgentId())
+                    .scope(memory.getScope() != null ? memory.getScope().name() : null)
+                    .content(memory.getData() != null ? memory.getData().toString() : null)
+                    .build();
+
             vectorStore.upsert(memory.getId(), embedding, payload);
         }
     }
@@ -138,13 +158,14 @@ public class DefaultMemoryService implements MemoryService {
 
         // Score vector results (rank starting at 1)
         for (int rank = 0; rank < vectorResults.size(); rank++) {
-            String id = vectorResults.get(rank).getId();
+            VectorSearchResult result = vectorResults.get(rank);
+            String id = result.getId();
             double score = 1.0 / (RRF_K + rank + 1);
             rrfScores.merge(id, score, Double::sum);
 
-            Map<String, Object> payload = vectorResults.get(rank).getPayload();
-            if (payload != null && payload.containsKey("memory")) {
-                memoryMap.put(id, (Memory) payload.get("memory"));
+            Payload payload = result.getPayload();
+            if (payload != null && payload.getMemoryId() != null) {
+                documentStore.findById(payload.getMemoryId()).ifPresent(m -> memoryMap.put(id, m));
             }
         }
 

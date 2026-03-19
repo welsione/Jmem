@@ -1,6 +1,7 @@
 package com.jmem.storage.impl;
 
-import com.jmem.model.VectorSearchResult;
+import com.jmem.storage.Payload;
+import com.jmem.storage.SearchFilter;
 import com.jmem.storage.VectorStore;
 
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 public class InMemoryVectorStore implements VectorStore {
 
     private final ConcurrentHashMap<String, float[]> vectors;
-    private final ConcurrentHashMap<String, Map<String, Object>> payloads;
+    private final ConcurrentHashMap<String, Payload> payloads;
 
     public InMemoryVectorStore() {
         this.vectors = new ConcurrentHashMap<>();
@@ -22,7 +23,7 @@ public class InMemoryVectorStore implements VectorStore {
     }
 
     @Override
-    public void upsert(String id, float[] vector, Map<String, Object> payload) {
+    public void upsert(String id, float[] vector, Payload payload) {
         vectors.put(id, vector);
         payloads.put(id, payload);
     }
@@ -35,13 +36,14 @@ public class InMemoryVectorStore implements VectorStore {
     }
 
     @Override
-    public List<VectorSearchResult> search(float[] queryVector, int topK, Map<String, Object> filter) {
+    public List<VectorSearchResult> search(float[] queryVector, int topK, SearchFilter filter) {
         return vectors.entrySet().stream()
                 .map(entry -> new VectorSearchResult(
                         entry.getKey(),
                         entry.getValue(),
                         payloads.get(entry.getKey()),
                         (float) cosineSimilarity(queryVector, entry.getValue())))
+                .filter(result -> matchesFilter(result.getPayload(), filter))
                 .sorted((a, b) -> Float.compare(b.getScore(), a.getScore()))
                 .limit(topK)
                 .collect(Collectors.toList());
@@ -69,12 +71,27 @@ public class InMemoryVectorStore implements VectorStore {
         return vectors.containsKey(id);
     }
 
+    private boolean matchesFilter(Payload payload, SearchFilter filter) {
+        if (filter == null) return true;
+        if (payload == null) return false;
+
+        if (filter.getScope() != null && !filter.getScope().equals(payload.getScope())) {
+            return false;
+        }
+        if (filter.getUserId() != null && !filter.getUserId().equals(payload.getUserId())) {
+            return false;
+        }
+        if (filter.getSessionId() != null && !filter.getSessionId().equals(payload.getSessionId())) {
+            return false;
+        }
+        if (filter.getAgentId() != null && !filter.getAgentId().equals(payload.getAgentId())) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Calculates cosine similarity between two vectors.
-     *
-     * @param vec1 the first vector
-     * @param vec2 the second vector
-     * @return the cosine similarity score between -1 and 1
      */
     private double cosineSimilarity(float[] vec1, float[] vec2) {
         if (vec1.length != vec2.length) {

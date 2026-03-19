@@ -1,7 +1,6 @@
 package com.jmem.storage;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -16,7 +15,7 @@ public interface VectorStore {
      * @param vector  the vector data
      * @param payload additional metadata
      */
-    void upsert(String id, float[] vector, Map<String, Object> payload);
+    void upsert(String id, float[] vector, Payload payload);
 
     /**
      * Upsert multiple vector entries in batch.
@@ -33,7 +32,7 @@ public interface VectorStore {
      * @param filter      optional metadata filter
      * @return list of search results
      */
-    List<VectorSearchResult> search(float[] queryVector, int topK, Map<String, Object> filter);
+    List<VectorSearchResult> search(float[] queryVector, int topK, SearchFilter filter);
 
     /**
      * Get vector by ID.
@@ -69,25 +68,17 @@ public interface VectorStore {
     class VectorEntry {
         private final String id;
         private final float[] vector;
-        private final Map<String, Object> payload;
+        private final Payload payload;
 
-        public VectorEntry(String id, float[] vector, Map<String, Object> payload) {
+        public VectorEntry(String id, float[] vector, Payload payload) {
             this.id = id;
             this.vector = vector;
             this.payload = payload;
         }
 
-        public String getId() {
-            return id;
-        }
-
-        public float[] getVector() {
-            return vector;
-        }
-
-        public Map<String, Object> getPayload() {
-            return payload;
-        }
+        public String getId() { return id; }
+        public float[] getVector() { return vector; }
+        public Payload getPayload() { return payload; }
     }
 
     /**
@@ -96,30 +87,19 @@ public interface VectorStore {
     class VectorSearchResult {
         private final String id;
         private final float[] vector;
-        private final Map<String, Object> payload;
+        private final Payload payload;
         private final float score;
 
-        public VectorSearchResult(String id, float[] vector, Map<String, Object> payload, float score) {
+        public VectorSearchResult(String id, float[] vector, Payload payload, float score) {
             this.id = id;
             this.vector = vector;
             this.payload = payload;
             this.score = score;
         }
 
-        public String getId() {
-            return id;
-        }
-
-        public float[] getVector() {
-            return vector;
-        }
-
-        public Map<String, Object> getPayload() {
-            return payload;
-        }
-
-        public float getScore() {
-            return score;
-        }
+        public String getId() { return id; }
+        public float[] getVector() { return vector; }
+        public Payload getPayload() { return payload; }
+        public float getScore() { return score; }
     }
 }

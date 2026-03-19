@@ -1,6 +1,8 @@
 package com.jmem.core.impl;
 
 import com.jmem.core.MemoryService;
+import com.jmem.core.fusion.FusionStrategy;
+import com.jmem.core.fusion.ReciprocalRankFusionStrategy;
 import com.jmem.embedder.Embedder;
 import com.jmem.model.Memory;
 import com.jmem.model.MemoryScope;
@@ -15,20 +17,24 @@ import java.util.stream.Collectors;
 
 /**
  * MemoryService 的默认实现，提供混合搜索功能，
- * 使用 RRF（互惠排名融合）算法进行结果融合。
+ * 使用可配置的结果融合策略。
  */
 public class DefaultMemoryService implements MemoryService {
-
-    private static final int RRF_K = 60;
 
     private final VectorStore vectorStore;
     private final DocumentStore documentStore;
     private final Embedder embedder;
+    private final FusionStrategy fusionStrategy;
 
     public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder) {
+        this(vectorStore, documentStore, embedder, new ReciprocalRankFusionStrategy());
+    }
+
+    public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder, FusionStrategy fusionStrategy) {
         this.vectorStore = vectorStore;
         this.documentStore = documentStore;
         this.embedder = embedder;
+        this.fusionStrategy = fusionStrategy;
     }
 
     @Override
@@ -90,8 +96,58 @@ public class DefaultMemoryService implements MemoryService {
         // 文档搜索
         List<Memory> documentResults = documentStore.search(query, limit * 2);
 
-        // RRF 融合
-        return fuseResults(vectorResults, documentResults, limit, scope);
+        // 转换为 ScoredResult 并融合
+        List<FusionStrategy.ScoredResult> vectorScoredResults = vectorResults.stream()
+                .map(this::toScoredResult)
+                .toList();
+
+        List<FusionStrategy.ScoredResult> docScoredResults = documentResults.stream()
+                .map(this::toScoredResult)
+                .toList();
+
+        return fusionStrategy.fuse(List.of(vectorScoredResults, docScoredResults), limit, scope);
+    }
+
+    private FusionStrategy.ScoredResult toScoredResult(VectorSearchResult result) {
+        return new FusionStrategy.ScoredResult() {
+            @Override
+            public String getId() {
+                return result.getId();
+            }
+
+            @Override
+            public double getScore() {
+                return result.getScore();
+            }
+
+            @Override
+            public Memory getMemory() {
+                Payload payload = result.getPayload();
+                if (payload != null && payload.getMemoryId() != null) {
+                    return documentStore.findById(payload.getMemoryId()).orElse(null);
+                }
+                return documentStore.findById(result.getId()).orElse(null);
+            }
+        };
+    }
+
+    private FusionStrategy.ScoredResult toScoredResult(Memory memory) {
+        return new FusionStrategy.ScoredResult() {
+            @Override
+            public String getId() {
+                return memory.getId();
+            }
+
+            @Override
+            public double getScore() {
+                return 0.0;
+            }
+
+            @Override
+            public Memory getMemory() {
+                return memory;
+            }
+        };
     }
 
     @Override
@@ -99,9 +155,9 @@ public class DefaultMemoryService implements MemoryService {
         if (scope == null) {
             // 返回所有记忆
             List<Memory> all = new ArrayList<>();
-            documentStore.findByScope(MemoryScope.USER.name(), null).forEach(all::add);
-            documentStore.findByScope(MemoryScope.SESSION.name(), null).forEach(all::add);
-            documentStore.findByScope(MemoryScope.AGENT.name(), null).forEach(all::add);
+            all.addAll(documentStore.findByScope(MemoryScope.USER.name(), null));
+            all.addAll(documentStore.findByScope(MemoryScope.SESSION.name(), null));
+            all.addAll(documentStore.findByScope(MemoryScope.AGENT.name(), null));
             return all;
         }
         return documentStore.findByScope(scope.name(), scopeId);
@@ -143,47 +199,5 @@ public class DefaultMemoryService implements MemoryService {
     public String extractKnowledge(Memory memory) {
         // 这是占位符 - 实际实现需要使用 LLM
         return "从以下内容提取的知识: " + memory.getData();
-    }
-
-    /**
-     * 使用 RRF 算法融合向量和文档搜索结果。
-     * 分数 = Σ 1/(k+rank)，其中 k=60
-     */
-    private List<Memory> fuseResults(List<VectorSearchResult> vectorResults,
-                                     List<Memory> documentResults,
-                                     int topK,
-                                     MemoryScope scope) {
-        Map<String, Double> rrfScores = new HashMap<>();
-        Map<String, Memory> memoryMap = new HashMap<>();
-
-        // 对向量结果计分（排名从 1 开始）
-        for (int rank = 0; rank < vectorResults.size(); rank++) {
-            VectorSearchResult result = vectorResults.get(rank);
-            String id = result.getId();
-            double score = 1.0 / (RRF_K + rank + 1);
-            rrfScores.merge(id, score, Double::sum);
-
-            Payload payload = result.getPayload();
-            if (payload != null && payload.getMemoryId() != null) {
-                documentStore.findById(payload.getMemoryId()).ifPresent(m -> memoryMap.put(id, m));
-            }
-        }
-
-        // 对文档结果计分（排名从 1 开始）
-        for (int rank = 0; rank < documentResults.size(); rank++) {
-            String id = documentResults.get(rank).getId();
-            double score = 1.0 / (RRF_K + rank + 1);
-            rrfScores.merge(id, score, Double::sum);
-            memoryMap.put(id, documentResults.get(rank));
-        }
-
-        // 按 RRF 分数降序排序并取前 K 个
-        return rrfScores.entrySet().stream()
-                .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
-                .limit(topK)
-                .map(entry -> memoryMap.get(entry.getKey()))
-                .filter(Objects::nonNull)
-                .filter(m -> scope == null || m.getScope() == scope)
-                .collect(Collectors.toList());
     }
 }

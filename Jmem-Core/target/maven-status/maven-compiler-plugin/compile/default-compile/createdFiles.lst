@@ -16,14 +16,18 @@ com/jmem/JmemAutoConfiguration.class
 com/jmem/storage/impl/InMemoryDocumentStore.class
 com/jmem/model/SearchResult$SearchResultBuilder.class
 com/jmem/storage/impl/QdrantRequests$CollectionConfig.class
+com/jmem/core/fusion/ReciprocalRankFusionStrategy.class
 com/jmem/util/JsonUtils.class
 com/jmem/storage/impl/QdrantRequests$CreateCollectionRequest$CreateCollectionRequestBuilder.class
 com/jmem/storage/Payload$PayloadBuilder.class
 com/jmem/storage/impl/QdrantRequests$CollectionConfig$VectorConfig.class
+com/jmem/core/fusion/FusionStrategy$ScoredResult.class
 com/jmem/storage/impl/InMemoryDocumentStore$1.class
 com/jmem/storage/impl/QdrantRequests$DeleteRequest$DeleteRequestBuilder.class
 com/jmem/storage/SearchFilter.class
 com/jmem/storage/VectorStore$VectorSearchResult.class
+com/jmem/core/impl/DefaultMemoryService$1.class
+com/jmem/core/fusion/FusionStrategy.class
 com/jmem/model/Entity$EntityBuilder.class
 com/jmem/embedder/impl/SimpleEmbedder.class
 com/jmem/storage/impl/QdrantRequests$SearchRequest$SearchRequestBuilder.class
@@ -47,6 +51,7 @@ com/jmem/storage/impl/QdrantVectorStore$SearchResult.class
 com/jmem/core/MemoryService.class
 com/jmem/embedder/Embedder.class
 com/jmem/storage/impl/QdrantRequests$CreateCollectionRequest.class
+com/jmem/core/impl/DefaultMemoryService$2.class
 com/jmem/config/JmemProperties$EmbedderConfig.class
 com/jmem/config/JmemProperties.class
 com/jmem/storage/impl/QdrantVectorStore$GetPointResult.class

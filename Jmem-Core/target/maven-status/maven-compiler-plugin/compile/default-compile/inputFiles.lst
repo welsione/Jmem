@@ -10,6 +10,7 @@
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/model/VectorSearchResult.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/config/JmemProperties.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/JmemAutoConfiguration.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/fusion/ReciprocalRankFusionStrategy.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/VectorStore.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/model/MemoryScope.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/impl/InMemoryDocumentStore.java
@@ -22,4 +23,5 @@
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/embedder/impl/SimpleEmbedder.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/config/ProviderConfig.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/storage/impl/QdrantRequests.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/core/fusion/FusionStrategy.java
 /Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Core/src/main/java/com/jmem/model/Entity.java

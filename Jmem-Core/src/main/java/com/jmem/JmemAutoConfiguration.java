@@ -2,10 +2,17 @@ package com.jmem;
 
 import com.jmem.config.JmemProperties;
 import com.jmem.core.MemoryService;
+import com.jmem.core.fusion.FusionStrategy;
+import com.jmem.core.fusion.ReciprocalRankFusionStrategy;
 import com.jmem.core.impl.DefaultMemoryService;
+import com.jmem.core.knowledge.KnowledgeExtractor;
+import com.jmem.core.knowledge.LLMKnowledgeExtractor;
+import com.jmem.core.knowledge.RuleBasedKnowledgeExtractor;
 import com.jmem.embedder.Embedder;
 import com.jmem.embedder.impl.SiliconFlowEmbedder;
 import com.jmem.embedder.impl.SimpleEmbedder;
+import com.jmem.llm.LLM;
+import com.jmem.llm.impl.SiliconFlowLLM;
 import com.jmem.storage.DocumentStore;
 import com.jmem.storage.VectorStore;
 import com.jmem.storage.impl.InMemoryDocumentStore;
@@ -52,7 +59,35 @@ public class JmemAutoConfiguration {
     }
 
     @Bean
-    public MemoryService memoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder) {
-        return new DefaultMemoryService(vectorStore, documentStore, embedder);
+    public LLM llm() {
+        String llmType = properties.getLlm().getType();
+        if ("siliconflow".equalsIgnoreCase(llmType)) {
+            String apiKey = properties.getLlm().getApiKey();
+            if (apiKey != null && !apiKey.isBlank()) {
+                return new SiliconFlowLLM(properties.getLlm());
+            }
+        }
+        // 默认返回 null，使用 RuleBasedKnowledgeExtractor
+        return null;
+    }
+
+    @Bean
+    public FusionStrategy fusionStrategy() {
+        return new ReciprocalRankFusionStrategy();
+    }
+
+    @Bean
+    public KnowledgeExtractor knowledgeExtractor(LLM llm) {
+        if (llm != null) {
+            return new LLMKnowledgeExtractor(llm);
+        }
+        return new RuleBasedKnowledgeExtractor();
+    }
+
+    @Bean
+    public MemoryService memoryService(VectorStore vectorStore, DocumentStore documentStore,
+                                       Embedder embedder, FusionStrategy fusionStrategy,
+                                       KnowledgeExtractor knowledgeExtractor) {
+        return new DefaultMemoryService(vectorStore, documentStore, embedder, fusionStrategy, knowledgeExtractor);
     }
 }

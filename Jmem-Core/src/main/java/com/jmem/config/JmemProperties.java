@@ -12,6 +12,7 @@ public class JmemProperties {
 
     private EmbedderConfig embedder = new EmbedderConfig();
     private VectorStoreConfig vectorStore = new VectorStoreConfig();
+    private LLMConfig llm = new LLMConfig();
 
     @Data
     public static class EmbedderConfig {
@@ -26,5 +27,12 @@ public class JmemProperties {
         private String url = "http://localhost:6333";
         private String collectionName = "jmem_memories";
         private Integer vectorSize = 1024;
+    }
+
+    @Data
+    public static class LLMConfig {
+        private String type = "rule-based";  // "rule-based" 或 "siliconflow"
+        private String apiKey = System.getenv("SILICONFLOW_API_KEY");
+        private String model = "Qwen/Qwen2.5-7B-Instruct";
     }
 }

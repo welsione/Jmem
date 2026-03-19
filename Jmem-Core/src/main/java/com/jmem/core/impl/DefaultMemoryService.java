@@ -3,6 +3,8 @@ package com.jmem.core.impl;
 import com.jmem.core.MemoryService;
 import com.jmem.core.fusion.FusionStrategy;
 import com.jmem.core.fusion.ReciprocalRankFusionStrategy;
+import com.jmem.core.knowledge.KnowledgeExtractor;
+import com.jmem.core.knowledge.RuleBasedKnowledgeExtractor;
 import com.jmem.embedder.Embedder;
 import com.jmem.model.Memory;
 import com.jmem.model.MemoryScope;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * MemoryService 的默认实现，提供混合搜索功能，
- * 使用可配置的结果融合策略。
+ * 使用可配置的结果融合策略和知识提取器。
  */
 public class DefaultMemoryService implements MemoryService {
 
@@ -25,16 +27,24 @@ public class DefaultMemoryService implements MemoryService {
     private final DocumentStore documentStore;
     private final Embedder embedder;
     private final FusionStrategy fusionStrategy;
+    private final KnowledgeExtractor knowledgeExtractor;
 
     public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder) {
-        this(vectorStore, documentStore, embedder, new ReciprocalRankFusionStrategy());
+        this(vectorStore, documentStore, embedder, new ReciprocalRankFusionStrategy(), new RuleBasedKnowledgeExtractor());
     }
 
-    public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder, FusionStrategy fusionStrategy) {
+    public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder,
+                                FusionStrategy fusionStrategy) {
+        this(vectorStore, documentStore, embedder, fusionStrategy, new RuleBasedKnowledgeExtractor());
+    }
+
+    public DefaultMemoryService(VectorStore vectorStore, DocumentStore documentStore, Embedder embedder,
+                                FusionStrategy fusionStrategy, KnowledgeExtractor knowledgeExtractor) {
         this.vectorStore = vectorStore;
         this.documentStore = documentStore;
         this.embedder = embedder;
         this.fusionStrategy = fusionStrategy;
+        this.knowledgeExtractor = knowledgeExtractor;
     }
 
     @Override
@@ -197,7 +207,18 @@ public class DefaultMemoryService implements MemoryService {
 
     @Override
     public String extractKnowledge(Memory memory) {
-        // 这是占位符 - 实际实现需要使用 LLM
-        return "从以下内容提取的知识: " + memory.getData();
+        if (knowledgeExtractor != null && knowledgeExtractor.isSupported()) {
+            return knowledgeExtractor.extract(memory);
+        }
+        return "知识提取器不可用";
+    }
+
+    /**
+     * 获取知识提取器。
+     *
+     * @return 知识提取器实例
+     */
+    public KnowledgeExtractor getKnowledgeExtractor() {
+        return knowledgeExtractor;
     }
 }

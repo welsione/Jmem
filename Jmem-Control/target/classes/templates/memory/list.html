@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Memory List</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .actions a { margin-right: 10px; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; }
+        .search-box { margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Memory List</h1>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/memory">Memory List</a>
+        <a href="/memory/new">Add Memory</a>
+    </nav>
+
+    <div class="search-box">
+        <form action="/memory/search" method="get">
+            <input type="text" name="query" placeholder="Search memories..." required>
+            <select name="scope">
+                <option value="">All Scopes</option>
+                <option th:each="s : ${scopes}" th:value="${s}" th:text="${s}"></option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Scope</th>
+                <th>User ID</th>
+                <th>Session ID</th>
+                <th>Agent ID</th>
+                <th>Data</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="m : ${memories}">
+                <td th:text="${#strings.abbreviate(m.id, 20)}">-</td>
+                <td th:text="${m.scope}">-</td>
+                <td th:text="${#strings.abbreviate(m.userId, 15)}">-</td>
+                <td th:text="${#strings.abbreviate(m.sessionId, 15)}">-</td>
+                <td th:text="${#strings.abbreviate(m.agentId, 15)}">-</td>
+                <td th:text="${#strings.abbreviate(m.data, 50)}">-</td>
+                <td th:text="${#temporals.format(m.createdAt, 'yyyy-MM-dd HH:mm')}">-</td>
+                <td class="actions">
+                    <a th:href="@{/memory/{id}(id=${m.id})}">View</a>
+                    <a th:href="@{/memory/{id}/edit(id=${m.id})}">Edit</a>
+                    <form th:action="@{/memory/{id}/delete(id=${m.id})}" method="post" style="display:inline;">
+                        <button type="submit" onclick="return confirm('Delete this memory?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(memories)}">
+                <td colspan="8">No memories found.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

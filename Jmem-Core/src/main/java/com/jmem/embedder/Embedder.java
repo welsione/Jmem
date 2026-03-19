@@ -1,22 +1,22 @@
 package com.jmem.embedder;
 
 /**
- * Embedder interface for text vectorization.
+ * 文本向量化接口。
  */
 public interface Embedder {
 
     /**
-     * Embed a single text into a vector.
+     * 将单个文本转换为向量。
      *
-     * @param text the text to embed
-     * @return the embedding vector
+     * @param text 要转换的文本
+     * @return 文本向量
      */
     float[] embed(String text);
 
     /**
-     * Get the dimension of the embedding vectors.
+     * 获取向量维度。
      *
-     * @return the embedding dimension
+     * @return 向量维度
      */
     int getDimension();
 }

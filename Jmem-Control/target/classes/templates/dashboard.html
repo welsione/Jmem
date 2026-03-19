@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Jmem Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .card { border: 1px solid #ddd; padding: 20px; margin: 10px; display: inline-block; width: 200px; }
+        .card h3 { margin-top: 0; color: #333; }
+        .card .count { font-size: 36px; font-weight: bold; color: #007bff; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Jmem Control Dashboard</h1>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/memory">Memory List</a>
+        <a href="/memory/new">Add Memory</a>
+        <a href="/stats">Statistics</a>
+    </nav>
+
+    <div class="card">
+        <h3>Total Memories</h3>
+        <div class="count" th:text="${totalMemoryCount}">0</div>
+    </div>
+
+    <div class="card">
+        <h3>User Memories</h3>
+        <div class="count" th:text="${userMemoryCount}">0</div>
+    </div>
+
+    <div class="card">
+        <h3>Session Memories</h3>
+        <div class="count" th:text="${sessionMemoryCount}">0</div>
+    </div>
+
+    <div class="card">
+        <h3>Agent Memories</h3>
+        <div class="count" th:text="${agentMemoryCount}">0</div>
+    </div>
+</body>
+</html>

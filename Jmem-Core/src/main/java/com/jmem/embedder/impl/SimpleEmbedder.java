@@ -3,8 +3,8 @@ package com.jmem.embedder.impl;
 import com.jmem.embedder.Embedder;
 
 /**
- * Simple embedder implementation using character-based hashing.
- * Produces deterministic embeddings for text.
+ * 基于字符哈希的简单向量化实现。
+ * 为文本生成确定性向量。
  */
 public class SimpleEmbedder implements Embedder {
 
@@ -23,7 +23,7 @@ public class SimpleEmbedder implements Embedder {
             vector[bucket] += (float) c / 255.0f;
         }
 
-        // Normalize
+        // 归一化
         double sum = 0;
         for (float v : vector) {
             sum += v * v;

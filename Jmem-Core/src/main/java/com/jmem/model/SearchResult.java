@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Search result containing a memory and its relevance score.
+ * 搜索结果，包含记忆及其相关性分数。
  */
 @Data
 @Builder

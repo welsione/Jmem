@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * In-memory document store implementation using ConcurrentHashMap.
+ * 基于 ConcurrentHashMap 的内存文档存储实现。
  */
 public class InMemoryDocumentStore implements DocumentStore {
 

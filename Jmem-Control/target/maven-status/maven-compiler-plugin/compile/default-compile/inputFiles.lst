@@ -1,5 +1,3 @@
-/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/control/MemoryPolicy.java
-/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/control/MemoryController.java
-/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/Main.java
-/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/control/MemoryEvent.java
-/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/control/MemoryRegistry.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/JmemControlApplication.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/controller/DashboardController.java
+/Users/weigaolei/CodeSpace/proj/Jmem/Jmem/Jmem-Control/src/main/java/com/jmem/controller/MemoryController.java

@@ -1,7 +1,7 @@
 package com.jmem.model;
 
 /**
- * Enum representing the scope/boundary of a memory entity.
+ * 枚举，表示记忆实体的范围/边界。
  */
 public enum MemoryScope {
     USER,

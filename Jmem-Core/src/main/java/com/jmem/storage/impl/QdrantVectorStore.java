@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Qdrant vector store implementation using HTTP REST API.
+ * 使用 HTTP REST API 的 Qdrant 向量存储实现。
  */
 public class QdrantVectorStore implements VectorStore {
 

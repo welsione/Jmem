@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * Vector search result containing an ID, similarity score, and payload.
+ * 向量搜索结果，包含 ID、相似度分数和负载。
  */
 @Data
 @Builder

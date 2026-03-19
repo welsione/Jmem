@@ -43,7 +43,7 @@ public class JmemAutoConfiguration {
     @Bean
     public Embedder embedder() {
         String apiKey = properties.getEmbedder().getApiKey();
-        // Use SiliconFlow if API key is available, otherwise fallback to SimpleEmbedder
+        // 如果 API 密钥可用则使用 SiliconFlow，否则回退到 SimpleEmbedder
         if (apiKey != null && !apiKey.isBlank()) {
             return new SiliconFlowEmbedder(properties.getEmbedder());
         }

@@ -14,8 +14,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Default implementation of MemoryService providing hybrid search
- * with RRF (Reciprocal Rank Fusion) algorithm for result fusion.
+ * MemoryService 的默认实现，提供混合搜索功能，
+ * 使用 RRF（互惠排名融合）算法进行结果融合。
  */
 public class DefaultMemoryService implements MemoryService {
 
@@ -84,20 +84,20 @@ public class DefaultMemoryService implements MemoryService {
     public List<Memory> hybridSearch(String query, MemoryScope scope, int limit) {
         float[] queryEmbedding = embedder.embed(query);
 
-        // Vector search
+        // 向量搜索
         List<VectorSearchResult> vectorResults = vectorStore.search(queryEmbedding, limit * 2, null);
 
-        // Document search
+        // 文档搜索
         List<Memory> documentResults = documentStore.search(query, limit * 2);
 
-        // RRF fusion
+        // RRF 融合
         return fuseResults(vectorResults, documentResults, limit, scope);
     }
 
     @Override
     public List<Memory> getAll(MemoryScope scope, String scopeId) {
         if (scope == null) {
-            // Return all memories
+            // 返回所有记忆
             List<Memory> all = new ArrayList<>();
             documentStore.findByScope(MemoryScope.USER.name(), null).forEach(all::add);
             documentStore.findByScope(MemoryScope.SESSION.name(), null).forEach(all::add);
@@ -111,7 +111,7 @@ public class DefaultMemoryService implements MemoryService {
     public void update(Memory memory) {
         if (documentStore.findById(memory.getId()).isPresent()) {
             documentStore.update(memory);
-            // Re-embed and update vector store
+            // 重新向量化并更新向量存储
             float[] embedding = embedder.embed(memory.getData().toString());
 
             Payload payload = Payload.builder()
@@ -136,18 +136,18 @@ public class DefaultMemoryService implements MemoryService {
     @Override
     public void reset(MemoryScope scope, String scopeId) {
         documentStore.deleteByScope(scope.name(), scopeId);
-        // Note: Vector store reset would require tracking IDs by scope
+        // 注意: 向量存储重置需要按范围跟踪 ID
     }
 
     @Override
     public String extractKnowledge(Memory memory) {
-        // This is a placeholder - actual implementation would use LLM
-        return "Extracted knowledge from: " + memory.getData();
+        // 这是占位符 - 实际实现需要使用 LLM
+        return "从以下内容提取的知识: " + memory.getData();
     }
 
     /**
-     * Fuses vector and document search results using RRF algorithm.
-     * Score = Σ 1/(k+rank) where k=60
+     * 使用 RRF 算法融合向量和文档搜索结果。
+     * 分数 = Σ 1/(k+rank)，其中 k=60
      */
     private List<Memory> fuseResults(List<VectorSearchResult> vectorResults,
                                      List<Memory> documentResults,
@@ -156,7 +156,7 @@ public class DefaultMemoryService implements MemoryService {
         Map<String, Double> rrfScores = new HashMap<>();
         Map<String, Memory> memoryMap = new HashMap<>();
 
-        // Score vector results (rank starting at 1)
+        // 对向量结果计分（排名从 1 开始）
         for (int rank = 0; rank < vectorResults.size(); rank++) {
             VectorSearchResult result = vectorResults.get(rank);
             String id = result.getId();
@@ -169,7 +169,7 @@ public class DefaultMemoryService implements MemoryService {
             }
         }
 
-        // Score document results (rank starting at 1)
+        // 对文档结果计分（排名从 1 开始）
         for (int rank = 0; rank < documentResults.size(); rank++) {
             String id = documentResults.get(rank).getId();
             double score = 1.0 / (RRF_K + rank + 1);
@@ -177,7 +177,7 @@ public class DefaultMemoryService implements MemoryService {
             memoryMap.put(id, documentResults.get(rank));
         }
 
-        // Sort by RRF score descending and take top K
+        // 按 RRF 分数降序排序并取前 K 个
         return rrfScores.entrySet().stream()
                 .sorted((a, b) -> Double.compare(b.getValue(), a.getValue()))
                 .limit(topK)

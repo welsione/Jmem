@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Memory</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .memory-detail { max-width: 800px; }
+        .field { margin: 15px 0; }
+        .field label { font-weight: bold; display: block; color: #666; }
+        .field .value { font-size: 16px; }
+        .actions { margin-top: 30px; }
+        .actions a, .actions button { margin-right: 10px; padding: 10px 15px; }
+        nav { margin-bottom: 20px; }
+        nav a { margin-right: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Memory Details</h1>
+
+    <nav>
+        <a href="/">Dashboard</a>
+        <a href="/memory">Memory List</a>
+    </nav>
+
+    <div class="memory-detail" th:if="${memory != null}">
+        <div class="field">
+            <label>ID</label>
+            <div class="value" th:text="${memory.id}">-</div>
+        </div>
+        <div class="field">
+            <label>Scope</label>
+            <div class="value" th:text="${memory.scope}">-</div>
+        </div>
+        <div class="field">
+            <label>User ID</label>
+            <div class="value" th:text="${memory.userId}">-</div>
+        </div>
+        <div class="field">
+            <label>Session ID</label>
+            <div class="value" th:text="${memory.sessionId}">-</div>
+        </div>
+        <div class="field">
+            <label>Agent ID</label>
+            <div class="value" th:text="${memory.agentId}">-</div>
+        </div>
+        <div class="field">
+            <label>Data</label>
+            <div class="value" th:text="${memory.data}">-</div>
+        </div>
+        <div class="field">
+            <label>Created</label>
+            <div class="value" th:text="${#temporals.format(memory.createdAt, 'yyyy-MM-dd HH:mm:ss')}">-</div>
+        </div>
+        <div class="field">
+            <label>Updated</label>
+            <div class="value" th:text="${#temporals.format(memory.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">-</div>
+        </div>
+
+        <div class="actions">
+            <a th:href="@{/memory/{id}/edit(id=${memory.id})}">Edit</a>
+            <form th:action="@{/memory/{id}/delete(id=${memory.id})}" method="post" style="display:inline;">
+                <button type="submit" onclick="return confirm('Delete this memory?')">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div th:if="${memory == null}">
+        <p>Memory not found.</p>
+        <a href="/memory">Back to list</a>
+    </div>
+</body>
+</html>

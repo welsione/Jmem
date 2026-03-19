@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Filter for vector search operations.
+ * 向量搜索操作的过滤器。
  */
 @Data
 @Builder
@@ -18,5 +18,5 @@ public class SearchFilter {
     private String userId;
     private String sessionId;
     private String agentId;
-    private String content;  // for text matching
+    private String content;  // 用于文本匹配
 }

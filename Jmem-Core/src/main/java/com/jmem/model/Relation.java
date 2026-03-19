@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * Graph relation representing an edge between two entities in a knowledge graph.
+ * 图关系，表示知识图谱中两个实体之间的边。
  */
 @Data
 @Builder

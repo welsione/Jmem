@@ -12,8 +12,8 @@ import java.net.http.HttpResponse;
 import java.util.Map;
 
 /**
- * Embedder implementation using SiliconFlow API.
- * API Docs: https://docs.siliconflow.cn/cn/api-reference/embeddings/create-embeddings
+ * 使用 SiliconFlow API 的向量化实现。
+ * API 文档: https://docs.siliconflow.cn/cn/api-reference/embeddings/create-embeddings
  */
 public class SiliconFlowEmbedder implements Embedder {
     

@@ -6,74 +6,74 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Document storage interface for memory document storage and retrieval.
+ * 记忆文档存储接口，用于记忆文档的存储和检索。
  */
 public interface DocumentStore {
 
     /**
-     * Save a memory document.
+     * 保存记忆文档。
      *
-     * @param memory the memory to store
+     * @param memory 要存储的记忆
      */
     void save(Memory memory);
 
     /**
-     * Save multiple memory documents in batch.
+     * 批量保存多个记忆文档。
      *
-     * @param memories list of memories
+     * @param memories 记忆列表
      */
     void saveBatch(List<Memory> memories);
 
     /**
-     * Find memory by ID.
+     * 根据 ID 查找记忆。
      *
-     * @param id the memory ID
-     * @return the memory if found
+     * @param id 记忆 ID
+     * @return 找到的记忆
      */
     Optional<Memory> findById(String id);
 
     /**
-     * Find all memories by scope.
+     * 根据范围查找所有记忆。
      *
-     * @param scope   the memory scope
-     * @param scopeId the scope ID
-     * @return list of memories
+     * @param scope   记忆范围
+     * @param scopeId 范围 ID
+     * @return 记忆列表
      */
     List<Memory> findByScope(String scope, String scopeId);
 
     /**
-     * Search memories by content query.
+     * 按内容查询搜索记忆。
      *
-     * @param query the search query
-     * @param limit maximum number of results
-     * @return list of matching memories
+     * @param query 搜索查询
+     * @param limit 最大结果数
+     * @return 匹配的记忆列表
      */
     List<Memory> search(String query, int limit);
 
     /**
-     * Update an existing memory.
+     * 更新现有记忆。
      *
-     * @param memory the memory to update
+     * @param memory 要更新的记忆
      */
     void update(Memory memory);
 
     /**
-     * Delete a memory by ID.
+     * 根据 ID 删除记忆。
      *
-     * @param id the memory ID
+     * @param id 记忆 ID
      */
     void delete(String id);
 
     /**
-     * Delete all memories by scope.
+     * 按范围删除所有记忆。
      *
-     * @param scope   the memory scope
-     * @param scopeId the scope ID
+     * @param scope   记忆范围
+     * @param scopeId 范围 ID
      */
     void deleteByScope(String scope, String scopeId);
 
     /**
-     * Delete all memories.
+     * 删除所有记忆。
      */
     void deleteAll();
 }

@@ -9,8 +9,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * In-memory vector store implementation using ConcurrentHashMap.
- * Provides cosine similarity-based search functionality.
+ * 基于 ConcurrentHashMap 的内存向量存储实现。
+ * 提供基于余弦相似度的搜索功能。
  */
 public class InMemoryVectorStore implements VectorStore {
 
@@ -91,7 +91,7 @@ public class InMemoryVectorStore implements VectorStore {
     }
 
     /**
-     * Calculates cosine similarity between two vectors.
+     * 计算两个向量的余弦相似度。
      */
     private double cosineSimilarity(float[] vec1, float[] vec2) {
         if (vec1.length != vec2.length) {

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * Graph entity representing a node in a knowledge graph.
+ * 图实体，表示知识图谱中的一个节点。
  */
 @Data
 @Builder

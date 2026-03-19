@@ -9,7 +9,7 @@ import java.time.Instant;
 import java.util.Map;
 
 /**
- * Memory entity representing a stored piece of memory with associated metadata.
+ * 记忆实体，表示存储的记忆片段及相关元数据。
  */
 @Data
 @Builder

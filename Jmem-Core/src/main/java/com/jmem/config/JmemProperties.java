@@ -22,7 +22,7 @@ public class JmemProperties {
 
     @Data
     public static class VectorStoreConfig {
-        private String type = "in-memory";  // "in-memory" or "qdrant"
+        private String type = "in-memory";  // "in-memory" 或 "qdrant"
         private String url = "http://localhost:6333";
         private String collectionName = "jmem_memories";
         private Integer vectorSize = 1024;

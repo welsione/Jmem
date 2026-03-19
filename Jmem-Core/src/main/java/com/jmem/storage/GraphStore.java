@@ -7,114 +7,114 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Graph storage interface for entity-relationship storage.
+ * 图存储接口，用于实体-关系存储。
  */
 public interface GraphStore {
 
     /**
-     * Upsert a single entity.
+     * 插入或更新单个实体。
      *
-     * @param entity the entity to upsert
+     * @param entity 要插入的实体
      */
     void upsertEntity(Entity entity);
 
     /**
-     * Get entity by ID.
+     * 根据 ID 获取实体。
      *
-     * @param id the entity ID
-     * @return the entity if found
+     * @param id 实体 ID
+     * @return 找到的实体
      */
     Optional<Entity> getEntity(String id);
 
     /**
-     * Get all entities of a specific type.
+     * 获取特定类型的所有实体。
      *
-     * @param type the entity type
-     * @return list of entities
+     * @param type 实体类型
+     * @return 实体列表
      */
     List<Entity> getEntitiesByType(String type);
 
     /**
-     * Delete an entity by ID.
+     * 根据 ID 删除实体。
      *
-     * @param id the entity ID
+     * @param id 实体 ID
      */
     void deleteEntity(String id);
 
     /**
-     * Upsert a single relation.
+     * 插入或更新单个关系。
      *
-     * @param relation the relation to upsert
+     * @param relation 要插入的关系
      */
     void upsertRelation(Relation relation);
 
     /**
-     * Get relation by ID.
+     * 根据 ID 获取关系。
      *
-     * @param id the relation ID
-     * @return the relation if found
+     * @param id 关系 ID
+     * @return 找到的关系
      */
     Optional<Relation> getRelation(String id);
 
     /**
-     * Get all relations for an entity.
+     * 获取实体的所有关系。
      *
-     * @param entityId the entity ID
-     * @return list of relations
+     * @param entityId 实体 ID
+     * @return 关系列表
      */
     List<Relation> getRelations(String entityId);
 
     /**
-     * Get neighbor entities connected via a specific relation type.
+     * 获取通过特定关系类型连接的邻居实体。
      *
-     * @param entityId     the source entity ID
-     * @param relationType the relation type
-     * @return list of neighbor entities
+     * @param entityId     源实体 ID
+     * @param relationType 关系类型
+     * @return 邻居实体列表
      */
     List<Entity> getNeighborEntities(String entityId, String relationType);
 
     /**
-     * Delete a relation by ID.
+     * 根据 ID 删除关系。
      *
-     * @param id the relation ID
+     * @param id 关系 ID
      */
     void deleteRelation(String id);
 
     /**
-     * Search entities by query string.
+     * 按查询字符串搜索实体。
      *
-     * @param query the search query
-     * @param topK  number of results to return
-     * @return list of matching entities
+     * @param query 搜索查询
+     * @param topK  返回结果数量
+     * @return 匹配的实体列表
      */
     List<Entity> searchEntities(String query, int topK);
 
     /**
-     * Find paths between two entities.
+     * 查找两个实体之间的路径。
      *
-     * @param sourceId the source entity ID
-     * @param targetId the target entity ID
-     * @param maxDepth maximum path depth
-     * @return list of paths found
+     * @param sourceId 源实体 ID
+     * @param targetId 目标实体 ID
+     * @param maxDepth 最大路径深度
+     * @return 找到的路径列表
      */
     List<Path> findPaths(String sourceId, String targetId, int maxDepth);
 
     /**
-     * Upsert multiple entities in batch.
+     * 批量插入或更新多个实体。
      *
-     * @param entities list of entities
+     * @param entities 实体列表
      */
     void upsertEntityBatch(List<Entity> entities);
 
     /**
-     * Upsert multiple relations in batch.
+     * 批量插入或更新多个关系。
      *
-     * @param relations list of relations
+     * @param relations 关系列表
      */
     void upsertRelationBatch(List<Relation> relations);
 
     /**
-     * Represents a path between entities in the graph.
+     * 图中实体之间的路径。
      */
     class Path {
         private final List<Entity> entities;

@@ -4,66 +4,66 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Vector storage interface for embedding-based storage and retrieval.
+ * 向量存储接口，用于基于向量的存储和检索。
  */
 public interface VectorStore {
 
     /**
-     * Upsert a single vector entry.
+     * 插入或更新单个向量。
      *
-     * @param id      unique identifier
-     * @param vector  the vector data
-     * @param payload additional metadata
+     * @param id      唯一标识符
+     * @param vector  向量数据
+     * @param payload 附加元数据
      */
     void upsert(String id, float[] vector, Payload payload);
 
     /**
-     * Upsert multiple vector entries in batch.
+     * 批量插入或更新多个向量。
      *
-     * @param entries list of vector entries
+     * @param entries 向量条目列表
      */
     void upsertBatch(List<VectorEntry> entries);
 
     /**
-     * Search for similar vectors.
+     * 搜索相似向量。
      *
-     * @param queryVector the query vector
-     * @param topK        number of results to return
-     * @param filter      optional metadata filter
-     * @return list of search results
+     * @param queryVector 查询向量
+     * @param topK       返回结果数量
+     * @param filter      可选的元数据过滤器
+     * @return 搜索结果列表
      */
     List<VectorSearchResult> search(float[] queryVector, int topK, SearchFilter filter);
 
     /**
-     * Get vector by ID.
+     * 根据 ID 获取向量。
      *
-     * @param id the vector ID
-     * @return the vector if found
+     * @param id 向量 ID
+     * @return 找到的向量
      */
     Optional<float[]> getVector(String id);
 
     /**
-     * Delete a vector by ID.
+     * 根据 ID 删除向量。
      *
-     * @param id the vector ID
+     * @param id 向量 ID
      */
     void delete(String id);
 
     /**
-     * Delete all vectors in the collection.
+     * 删除集合中的所有向量。
      */
     void deleteCollection();
 
     /**
-     * Check if a vector exists.
+     * 检查向量是否存在。
      *
-     * @param id the vector ID
-     * @return true if exists
+     * @param id 向量 ID
+     * @return 是否存在
      */
     boolean exists(String id);
 
     /**
-     * Represents a vector entry with metadata.
+     * 带元数据的向量条目。
      */
     class VectorEntry {
         private final String id;
@@ -82,7 +82,7 @@ public interface VectorStore {
     }
 
     /**
-     * Represents a vector search result.
+     * 向量搜索结果。
      */
     class VectorSearchResult {
         private final String id;

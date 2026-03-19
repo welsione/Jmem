@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Payload for vector storage operations.
+ * 向量存储操作的负载数据。
  */
 @Data
 @Builder

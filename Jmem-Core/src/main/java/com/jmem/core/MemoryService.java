@@ -6,74 +6,74 @@ import com.jmem.model.MemoryScope;
 import java.util.List;
 
 /**
- * Core memory service interface providing unified memory operations.
+ * 提供统一内存操作的核心内存服务接口。
  */
 public interface MemoryService {
 
     /**
-     * Add a new memory.
+     * 添加新记忆。
      *
-     * @param memory the memory to add
-     * @return the ID of the added memory
+     * @param memory 要添加的记忆
+     * @return 添加的记忆 ID
      */
     String add(Memory memory);
 
     /**
-     * Search memories by text query.
+     * 按文本查询搜索记忆。
      *
-     * @param query  the search query
-     * @param scope  the memory scope to search within
-     * @param limit  maximum number of results
-     * @return list of matching memories
+     * @param query  搜索查询
+     * @param scope  要搜索的记忆范围
+     * @param limit  最大结果数
+     * @return 匹配的记忆列表
      */
     List<Memory> search(String query, MemoryScope scope, int limit);
 
     /**
-     * Perform hybrid search combining vector and graph search.
+     * 执行结合向量和图搜索的混合搜索。
      *
-     * @param query  the search query
-     * @param scope  the memory scope
-     * @param limit  maximum number of results
-     * @return list of matching memories
+     * @param query  搜索查询
+     * @param scope  记忆范围
+     * @param limit  最大结果数
+     * @return 匹配的记忆列表
      */
     List<Memory> hybridSearch(String query, MemoryScope scope, int limit);
 
     /**
-     * Get all memories within a scope.
+     * 获取范围内所有记忆。
      *
-     * @param scope   the memory scope
-     * @param scopeId the scope ID (optional based on scope type)
-     * @return list of memories
+     * @param scope   记忆范围
+     * @param scopeId 范围 ID（根据范围类型可选）
+     * @return 记忆列表
      */
     List<Memory> getAll(MemoryScope scope, String scopeId);
 
     /**
-     * Update an existing memory.
+     * 更新现有记忆。
      *
-     * @param memory the memory to update
+     * @param memory 要更新的记忆
      */
     void update(Memory memory);
 
     /**
-     * Delete a memory by ID.
+     * 根据 ID 删除记忆。
      *
-     * @param id the memory ID
+     * @param id 记忆 ID
      */
     void delete(String id);
 
     /**
-     * Reset (delete all) memories within a scope.
+     * 重置（删除）范围内所有记忆。
      *
-     * @param scope   the memory scope
-     * @param scopeId the scope ID (optional based on scope type)
+     * @param scope   记忆范围
+     * @param scopeId 范围 ID（根据范围类型可选）
      */
     void reset(MemoryScope scope, String scopeId);
 
     /**
-     * Extract structured knowledge from a memory using LLM.
+     * 使用 LLM 从记忆中提取结构化知识。
      *
-     * @param memory the memory to extract knowledge from
-     * @return extracted knowledge
+     * @param memory 要提取知识的记忆
+     * @return 提取的知识
      */
     String extractKnowledge(Memory memory);
 }

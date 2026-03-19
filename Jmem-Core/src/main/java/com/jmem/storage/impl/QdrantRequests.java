@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Qdrant request/response POJOs for JSON serialization.
+ * Qdrant 请求/响应 POJO 类，用于 JSON 序列化。
  */
 public class QdrantRequests {
 
